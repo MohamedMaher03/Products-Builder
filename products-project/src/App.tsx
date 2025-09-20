@@ -6,6 +6,7 @@ import Button from "./components/ui/Button";
 import { FormInputList } from "./data/formInputList";
 import Input from "./components/ui/Input";
 import type { IProduct } from "./interfaces/IProduct";
+import { productValidation } from "./validation/productValidation";
 
 const App = () => {
   const defaultProduct: IProduct = {
@@ -41,8 +42,9 @@ const App = () => {
   };
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(product);
-    onCloseHandler();
+    const errors = productValidation(product);
+    console.log(errors);
+    //onCloseHandler();
   };
 
   /*  Render Products */

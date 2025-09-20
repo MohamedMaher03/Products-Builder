@@ -26,11 +26,18 @@ const App = () => {
   const [product, setProduct] = useState<IProduct>({
     ...defaultProduct,
   });
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    title: string;
+    description: string;
+    price: string;
+    imageUrl: string;
+    colors: string[];
+  }>({
     title: "",
     description: "",
     price: "",
     imageUrl: "",
+    colors: [],
   });
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -56,16 +63,21 @@ const App = () => {
   };
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const errors = productValidation(product);
-
-    const hasErrorMsg = Object.values(errors).some((msg) => msg !== "");
+    const productWithColors = { ...product, colors: tempColors };
+    const errors = productValidation(productWithColors);
+    const hasErrorMsg = Object.values(errors).some((msg) => {
+      if (Array.isArray(msg)) {
+        return msg.length > 0 && msg[0] !== "";
+      }
+      return msg !== "";
+    });
     if (hasErrorMsg) {
       setErrors(errors);
       return;
     }
     setProducts((prev) => [
       ...prev,
-      { ...product, id: (products.length + 1).toString(), colors: tempColors },
+      { ...productWithColors, id: (products.length + 1).toString() },
     ]);
     onCloseHandler();
   };
@@ -116,8 +128,11 @@ const App = () => {
         <Modal isOpen={isOpen} close={close} title="Product Details">
           <form className="mt-2 space-y-4" onSubmit={onSubmitHandler}>
             {formInputList}
-            <div className="flex items-center space-x-2">
-              {renderProductColors}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center space-x-2">
+                {renderProductColors}
+              </div>
+              <ErrorMessage message={errors.colors[0]} />
             </div>
             <div className="flex items-center flex-wrap space-x-1 gap-1">
               {tempColors.map((color) => (

@@ -3,17 +3,20 @@ export const productValidation = (product: {
   description: string;
   price: string;
   imageUrl: string;
+  colors: string[];
 }) => {
   const errors: {
     title: string;
     description: string;
     price: string;
     imageUrl: string;
+    colors: string[];
   } = {
     title: "",
     description: "",
     price: "",
     imageUrl: "",
+    colors: [],
   };
 
   if (
@@ -38,5 +41,9 @@ export const productValidation = (product: {
   if (product.imageUrl.trim() === "") {
     errors.imageUrl = "Image URL is required.";
   }
+    if (!product.colors || product.colors.length === 0) {
+      errors.colors = ["At least one color must be selected."];
+    }
+
   return errors;
 };

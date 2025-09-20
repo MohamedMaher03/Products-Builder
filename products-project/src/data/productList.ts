@@ -19,7 +19,7 @@ export const ProductList: IProduct[] = [
     price: "350000",
     imageUrl:
       "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    colors: ["bg-indigo-600", "bg-yellow-600", "bg-red-600"],
+    colors: ["bg-green-600", "bg-yellow-600", "bg-red-600"],
   },
   {
     id: "3",

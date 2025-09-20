@@ -22,7 +22,7 @@ const App = () => {
   };
 
   /*  Modal State */
-
+  const [products, setProducts] = useState<IProduct[]>([...ProductList]);
   const [product, setProduct] = useState<IProduct>({
     ...defaultProduct,
   });
@@ -35,7 +35,6 @@ const App = () => {
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log({ tempColors });
   /* Modal Handlers */
 
   const open = () => setIsOpen(true);
@@ -64,12 +63,15 @@ const App = () => {
       setErrors(errors);
       return;
     }
-
+    setProducts((prev) => [
+      ...prev,
+      { ...product, id: (products.length + 1).toString(), colors: tempColors },
+    ]);
     onCloseHandler();
   };
 
   /*  Render Products */
-  const renderProductList = ProductList.map((product) => (
+  const renderProductList = products.map((product) => (
     <ProductCard key={product.id} product={product} />
   ));
   const formInputList = FormInputList.map((input) => {

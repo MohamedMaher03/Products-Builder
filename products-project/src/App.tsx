@@ -32,8 +32,10 @@ const App = () => {
     price: "",
     imageUrl: "",
   });
+  const [tempColors, setTempColors] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
+  console.log({ tempColors });
   /* Modal Handlers */
 
   const open = () => setIsOpen(true);
@@ -88,7 +90,18 @@ const App = () => {
     );
   });
   const renderProductColors = colors.map((color) => (
-    <CircleColor key={color} color={color} />
+    <CircleColor
+      key={color}
+      color={color}
+      onClick={() => {
+        if (tempColors.includes(color)) {
+          const filteredColors = tempColors.filter((c) => c !== color);
+          setTempColors(filteredColors);
+          return;
+        }
+        setTempColors([...tempColors, color]);
+      }}
+    />
   ));
 
   return (
@@ -103,6 +116,16 @@ const App = () => {
             {formInputList}
             <div className="flex items-center space-x-2">
               {renderProductColors}
+            </div>
+            <div className="flex items-center flex-wrap space-x-1 gap-1">
+              {tempColors.map((color) => (
+                <span
+                  className={`text-sm text-white ${color} rounded-full px-2 py-1`}
+                  key={color}
+                >
+                  {color.replace("bg-", "").replace("-600", "")}
+                </span>
+              ))}
             </div>
             <div className="flex items-center justify-between space-x-2">
               <Button className="bg-indigo-600 ">Submit</Button>

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
 import { ProductList } from "./data/productList";
@@ -8,15 +8,19 @@ import Input from "./components/ui/Input";
 import type { IProduct } from "./interfaces/IProduct";
 
 const App = () => {
-  /*  Modal State */
-
-  const [product, setProduct] = useState<IProduct>({
+  const defaultProduct: IProduct = {
     id: "",
     title: "",
     description: "",
     price: "",
     imageUrl: "",
     colors: [],
+  };
+
+  /*  Modal State */
+
+  const [product, setProduct] = useState<IProduct>({
+    ...defaultProduct,
   });
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,6 +34,15 @@ const App = () => {
       ...product,
       [name]: value,
     });
+  };
+  const onCloseHandler = () => {
+    setProduct(defaultProduct);
+    close();
+  };
+  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(product);
+    onCloseHandler();
   };
 
   /*  Render Products */
@@ -61,11 +74,11 @@ const App = () => {
       <div className="bg-gray-100 p-4 m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
         {renderProductList}
         <Modal isOpen={isOpen} close={close} title="Product Details">
-          <form>
+          <form className="mt-2 space-y-4" onSubmit={onSubmitHandler}>
             {formInputList}
             <div className="flex items-center justify-between space-x-2">
               <Button className="bg-indigo-600 ">Submit</Button>
-              <Button className="bg-red-600 " onClick={close}>
+              <Button className="bg-red-600 " onClick={onCloseHandler}>
                 Close
               </Button>
             </div>

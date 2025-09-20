@@ -46,7 +46,7 @@ const App = () => {
           type={input.type}
           id={input.name}
           name={input.name}
-          value={product[input.name as keyof IProduct] || ""}
+          value={product[input.name]}
           onChange={onChangeHandler}
         />
       </div>

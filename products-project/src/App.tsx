@@ -7,6 +7,7 @@ import { FormInputList } from "./data/formInputList";
 import Input from "./components/ui/Input";
 import type { IProduct } from "./interfaces/IProduct";
 import { productValidation } from "./validation/productValidation";
+import ErrorMessage from "./components/ErrorMessage";
 
 const App = () => {
   const defaultProduct: IProduct = {
@@ -23,6 +24,12 @@ const App = () => {
   const [product, setProduct] = useState<IProduct>({
     ...defaultProduct,
   });
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+    price: "",
+    imageUrl: "",
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   /* Modal Handlers */
@@ -35,6 +42,10 @@ const App = () => {
       ...product,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
   const onCloseHandler = () => {
     setProduct(defaultProduct);
@@ -43,8 +54,14 @@ const App = () => {
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errors = productValidation(product);
-    console.log(errors);
-    //onCloseHandler();
+
+    const hasErrorMsg = Object.values(errors).some((msg) => msg !== "");
+    if (hasErrorMsg) {
+      setErrors(errors);
+      return;
+    }
+
+    onCloseHandler();
   };
 
   /*  Render Products */
@@ -64,6 +81,7 @@ const App = () => {
           value={product[input.name]}
           onChange={onChangeHandler}
         />
+        <ErrorMessage message={errors[input.name]} />
       </div>
     );
   });

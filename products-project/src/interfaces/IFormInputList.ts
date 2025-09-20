@@ -1,6 +1,6 @@
 export interface IFormInputList {
   id: string;
-  name: "title" | "description" | "price" | "imageUrl" | "colors";
+  name: "title" | "description" | "price" | "imageUrl";
   label: string;
   type: string;
 }

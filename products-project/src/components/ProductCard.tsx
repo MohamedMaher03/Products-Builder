@@ -2,6 +2,7 @@ import Image from "../components/Image";
 import Button from "../components/ui/Button";
 import type { IProduct } from "../interfaces/IProduct";
 import { txtSlicer } from "../utils/functions";
+import CircleColor from "./CircleColor";
 
 interface IProductCardProps {
   product: IProduct;
@@ -15,9 +16,9 @@ const ProductCard = ({ product }: IProductCardProps) => {
       <h2 className="font-bold text-lg">{title}</h2>
       <p className="text-gray-600">{txtSlicer(description)}</p>
       <div className="flex gap-2 mt-auto py-2">
-        <span className={`w-5 h-5 ${colors[0]} rounded-full`}></span>
-        <span className={`w-5 h-5 ${colors[1]} rounded-full`}></span>
-        <span className={`w-5 h-5 ${colors[2]} rounded-full`}></span>
+        <CircleColor color={colors[0]} />
+        <CircleColor color={colors[1]} />
+        <CircleColor color={colors[2]} />
       </div>
       <div className="flex justify-between items-center ">
         <span className="font-extrabold">${price.toLocaleString()}</span>

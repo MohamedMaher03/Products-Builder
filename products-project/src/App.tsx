@@ -8,6 +8,8 @@ import Input from "./components/ui/Input";
 import type { IProduct } from "./interfaces/IProduct";
 import { productValidation } from "./validation/productValidation";
 import ErrorMessage from "./components/ErrorMessage";
+import { colors } from "./data/colors";
+import CircleColor from "./components/CircleColor";
 
 const App = () => {
   const defaultProduct: IProduct = {
@@ -85,6 +87,9 @@ const App = () => {
       </div>
     );
   });
+  const renderProductColors = colors.map((color) => (
+    <CircleColor key={color} color={color} />
+  ));
 
   return (
     <main className="container mx-auto">
@@ -96,6 +101,9 @@ const App = () => {
         <Modal isOpen={isOpen} close={close} title="Product Details">
           <form className="mt-2 space-y-4" onSubmit={onSubmitHandler}>
             {formInputList}
+            <div className="flex items-center space-x-2">
+              {renderProductColors}
+            </div>
             <div className="flex items-center justify-between space-x-2">
               <Button className="bg-indigo-600 ">Submit</Button>
               <Button className="bg-red-600 " onClick={onCloseHandler}>

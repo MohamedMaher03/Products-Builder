@@ -1,23 +1,37 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
 import { ProductList } from "./data/productList";
 import Button from "./components/ui/Button";
 import { FormInputList } from "./data/formInputList";
 import Input from "./components/ui/Input";
+import type { IProduct } from "./interfaces/IProduct";
 
 const App = () => {
   /*  Modal State */
+
+  const [product, setProduct] = useState<IProduct>({
+    id: "",
+    title: "",
+    description: "",
+    price: "",
+    imageUrl: "",
+    colors: [],
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   /* Modal Handlers */
-  function open() {
-    setIsOpen(true);
-  }
 
-  function close() {
-    setIsOpen(false);
-  }
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setProduct({
+      ...product,
+      [name]: value,
+    });
+  };
+
   /*  Render Products */
   const renderProductList = ProductList.map((product) => (
     <ProductCard key={product.id} product={product} />
@@ -28,7 +42,13 @@ const App = () => {
         <label htmlFor={input.name} className="mb-2 font-bold">
           {input.label}
         </label>
-        <Input type={input.type} id={input.name} name={input.name} />
+        <Input
+          type={input.type}
+          id={input.name}
+          name={input.name}
+          value={product[input.name as keyof IProduct] || ""}
+          onChange={onChangeHandler}
+        />
       </div>
     );
   });
@@ -38,7 +58,7 @@ const App = () => {
       <Button className="bg-indigo-600 " onClick={open}>
         Add Product
       </Button>
-      <div className="bg-gray-100 p-4 m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 border-2 border-b-black">
+      <div className="bg-gray-100 p-4 m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
         {renderProductList}
         <Modal isOpen={isOpen} close={close} title="Product Details">
           <form>

@@ -12,19 +12,19 @@ const ProductCard = ({ product }: IProductCardProps) => {
   return (
     <div className="bg-white p-4 rounded-2xl shadow flex flex-col">
       <Image imageURL={imageUrl} alt="car image" className="rounded-md mb-2" />
-      <h2>{title}</h2>
-      <p>{txtSlicer(description)}</p>
-      <div className="flex gap-2 mt-auto">
+      <h2 className="font-bold text-lg">{title}</h2>
+      <p className="text-gray-600">{txtSlicer(description)}</p>
+      <div className="flex gap-2 mt-auto py-2">
         <span className={`w-5 h-5 ${colors[0]} rounded-full`}></span>
         <span className={`w-5 h-5 ${colors[1]} rounded-full`}></span>
         <span className={`w-5 h-5 ${colors[2]} rounded-full`}></span>
       </div>
-      <div className="flex justify-between items-center mt-4">
-        <span>${price.toLocaleString()}</span>
+      <div className="flex justify-between items-center ">
+        <span className="font-extrabold">${price.toLocaleString()}</span>
         <Image
           imageURL={imageUrl}
           alt="car image"
-          className="w-10 h-10 rounded-full object-bottom"
+          className="w-10 h-10 rounded-full object-bottom mb-3"
         />
       </div>
       <div className="flex items-center justify-between space-x-2">

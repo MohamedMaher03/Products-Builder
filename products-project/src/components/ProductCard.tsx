@@ -6,10 +6,21 @@ import CircleColor from "./CircleColor";
 
 interface IProductCardProps {
   product: IProduct;
+  setProductToEdit: (product: IProduct) => void;
+  openEditModal: () => void;
 }
 
-const ProductCard = ({ product }: IProductCardProps) => {
+const ProductCard = ({
+  product,
+  setProductToEdit,
+  openEditModal,
+}: IProductCardProps) => {
   const { title, description, imageUrl, colors, price } = product;
+  //HANDLERS
+  const onEdit = () => {
+    setProductToEdit(product);
+    openEditModal();
+  };
   return (
     <div className="bg-white p-4 rounded-2xl shadow flex flex-col">
       <Image imageURL={imageUrl} alt="car image" className="rounded-md mb-2" />
@@ -29,7 +40,9 @@ const ProductCard = ({ product }: IProductCardProps) => {
         />
       </div>
       <div className="flex items-center justify-between space-x-2">
-        <Button className="bg-indigo-600 ">Edit</Button>
+        <Button className="bg-indigo-600 " onClick={onEdit}>
+          Edit
+        </Button>
         <Button className="bg-red-600 ">Destroy</Button>
       </div>
     </div>

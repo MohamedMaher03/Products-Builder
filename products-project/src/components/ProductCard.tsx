@@ -8,24 +8,31 @@ interface IProductCardProps {
   product: IProduct;
   setProductToEdit: (product: IProduct) => void;
   openEditModal: () => void;
+  openDeleteModal: () => void;
   idx: number;
   setProductToEditIdx?: (idx: number) => void;
+  setProductToDeleteIdx?: (idx: number) => void;
 }
 
 const ProductCard = ({
   product,
   setProductToEdit,
   openEditModal,
+  openDeleteModal,
   idx,
   setProductToEditIdx,
+  setProductToDeleteIdx,
 }: IProductCardProps) => {
   const { title, description, imageUrl, colors, price } = product;
   //HANDLERS
   const onEdit = () => {
-    console.log(product);
     setProductToEdit(product);
     openEditModal();
     setProductToEditIdx?.(idx);
+  };
+  const onDelete = () => {
+    openDeleteModal();
+    setProductToDeleteIdx?.(idx);
   };
   return (
     <div className="bg-white p-4 rounded-2xl shadow flex flex-col">
@@ -49,7 +56,9 @@ const ProductCard = ({
         <Button className="bg-indigo-600 " onClick={onEdit}>
           Edit
         </Button>
-        <Button className="bg-red-600 ">Destroy</Button>
+        <Button className="bg-red-600 " onClick={onDelete}>
+          Delete
+        </Button>
       </div>
     </div>
   );

@@ -28,6 +28,8 @@ const App = () => {
   });
   const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProduct);
   const [productToEditIdx, setProductToEditIdx] = useState<number>(0);
+  const [productToDeleteIdx, setProductToDeleteIdx] = useState<number>(0);
+
   const [errors, setErrors] = useState<{
     title: string;
     description: string;
@@ -44,6 +46,7 @@ const App = () => {
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
   /* Modal Handlers */
 
@@ -51,6 +54,8 @@ const App = () => {
   const close = () => setIsOpen(false);
   const openEditModal = () => setIsOpenEditModal(true);
   const closeEditModal = () => setIsOpenEditModal(false);
+  const openDeleteModal = () => setIsOpenDeleteModal(true);
+  const closeDeleteModal = () => setIsOpenDeleteModal(false);
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProduct({
@@ -120,6 +125,13 @@ const App = () => {
 
     closeEditModal();
   };
+  const onDeleteHandler = () => {
+    const updatedProducts = products.filter(
+      (prod, idx) => idx !== productToDeleteIdx
+    );
+    setProducts(updatedProducts);
+    closeDeleteModal();
+  };
 
   /*  Render Products */
   const renderProductList = products.map((product, idx) => (
@@ -130,6 +142,8 @@ const App = () => {
       openEditModal={openEditModal}
       idx={idx}
       setProductToEditIdx={setProductToEditIdx}
+      setProductToDeleteIdx={setProductToDeleteIdx}
+      openDeleteModal={openDeleteModal}
     />
   ));
   const formInputList = FormInputList.map((input) => {
@@ -266,6 +280,24 @@ const App = () => {
             </Button>
           </div>
         </form>
+      </Modal>
+      {/*Delete Product Modal */}
+      <Modal
+        isOpen={isOpenDeleteModal}
+        close={closeDeleteModal}
+        title="Delete Product"
+      >
+        <div className="mb-3">
+          <p>Are you sure you want to delete this product?</p>
+        </div>
+        <div className="flex items-center justify-between space-x-2">
+          <Button className="bg-red-600 " onClick={onDeleteHandler}>
+            Delete
+          </Button>
+          <Button className="bg-gray-600 " onClick={closeDeleteModal}>
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </main>
   );

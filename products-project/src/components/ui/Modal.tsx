@@ -17,6 +17,12 @@ const Modal = ({ isOpen, close, title, children }: IModalProps) => {
         className="relative z-10 focus:outline-none"
         onClose={close}
       >
+        {/* Backdrop */}
+        <div
+          className="fixed inset-0 backdrop-blur-sm"
+          aria-hidden="true"
+          onClick={close}
+        />
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel

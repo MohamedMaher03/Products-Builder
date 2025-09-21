@@ -190,9 +190,15 @@ const App = () => {
 
   return (
     <main className="container mx-auto">
-      <Button className="bg-indigo-600 " onClick={open}>
-        Add Product
-      </Button>
+      <div className="flex justify-center items-center my-8">
+        <Button
+          className="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg shadow-md hover:bg-indigo-700 transition w-auto"
+          onClick={open}
+          width="w-fit"
+        >
+          Add Product
+        </Button>
+      </div>
       <div className="bg-gray-100 p-4 m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
         {renderProductList}
       </div>

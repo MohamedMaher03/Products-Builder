@@ -10,6 +10,7 @@ import { productValidation } from "./validation/productValidation";
 import ErrorMessage from "./components/ErrorMessage";
 import { colors } from "./data/colors";
 import CircleColor from "./components/CircleColor";
+import toast, { Toaster } from "react-hot-toast";
 
 const App = () => {
   const defaultProduct: IProduct = {
@@ -101,6 +102,7 @@ const App = () => {
       { ...productWithColors, id: (products.length + 1).toString() },
     ]);
     onCloseHandler();
+    toast.success("Product added successfully!");
   };
   const onSubmitEditHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -124,6 +126,7 @@ const App = () => {
     setProducts(updatedProducts);
 
     closeEditModal();
+    toast.success("Product edited successfully!");
   };
   const onDeleteHandler = () => {
     const updatedProducts = products.filter(
@@ -131,6 +134,7 @@ const App = () => {
     );
     setProducts(updatedProducts);
     closeDeleteModal();
+    toast.success("Product deleted successfully!");
   };
 
   /*  Render Products */
@@ -299,6 +303,7 @@ const App = () => {
           </Button>
         </div>
       </Modal>
+      <Toaster reverseOrder={false} />
     </main>
   );
 };

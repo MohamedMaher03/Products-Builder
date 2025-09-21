@@ -8,18 +8,24 @@ interface IProductCardProps {
   product: IProduct;
   setProductToEdit: (product: IProduct) => void;
   openEditModal: () => void;
+  idx: number;
+  setProductToEditIdx?: (idx: number) => void;
 }
 
 const ProductCard = ({
   product,
   setProductToEdit,
   openEditModal,
+  idx,
+  setProductToEditIdx,
 }: IProductCardProps) => {
   const { title, description, imageUrl, colors, price } = product;
   //HANDLERS
   const onEdit = () => {
+    console.log(product);
     setProductToEdit(product);
     openEditModal();
+    setProductToEditIdx?.(idx);
   };
   return (
     <div className="bg-white p-4 rounded-2xl shadow flex flex-col">
@@ -27,9 +33,9 @@ const ProductCard = ({
       <h2 className="font-bold text-lg">{title}</h2>
       <p className="text-gray-600">{txtSlicer(description)}</p>
       <div className="flex gap-2 mt-auto py-2">
-        <CircleColor color={colors[0]} />
-        <CircleColor color={colors[1]} />
-        <CircleColor color={colors[2]} />
+        {colors.map((color) => (
+          <CircleColor key={color} color={color} />
+        ))}
       </div>
       <div className="flex justify-between items-center ">
         <span className="font-extrabold">${price.toLocaleString()}</span>

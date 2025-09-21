@@ -27,6 +27,7 @@ const App = () => {
     ...defaultProduct,
   });
   const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProduct);
+  const [productToEditIdx, setProductToEditIdx] = useState<number>(0);
   const [errors, setErrors] = useState<{
     title: string;
     description: string;
@@ -98,7 +99,10 @@ const App = () => {
   };
   const onSubmitEditHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const productWithColors = { ...product, colors: tempColors };
+    const productWithColors = {
+      ...productToEdit,
+      colors: [...new Set(tempColors.concat(productToEdit.colors))], // ensures uniqueness
+    };
     const errors = productValidation(productWithColors);
     const hasErrorMsg = Object.values(errors).some((msg) => {
       if (Array.isArray(msg)) {
@@ -110,20 +114,22 @@ const App = () => {
       setErrors(errors);
       return;
     }
-    setProducts((prev) => [
-      ...prev,
-      { ...productWithColors, id: (products.length + 1).toString() },
-    ]);
-    onCloseHandler();
+    const updatedProducts = [...products];
+    updatedProducts[productToEditIdx] = productWithColors;
+    setProducts(updatedProducts);
+
+    closeEditModal();
   };
 
   /*  Render Products */
-  const renderProductList = products.map((product) => (
+  const renderProductList = products.map((product, idx) => (
     <ProductCard
       key={product.id}
       product={product}
       setProductToEdit={setProductToEdit}
       openEditModal={openEditModal}
+      idx={idx}
+      setProductToEditIdx={setProductToEditIdx}
     />
   ));
   const formInputList = FormInputList.map((input) => {
@@ -165,9 +171,16 @@ const App = () => {
       key={color}
       color={color}
       onClick={() => {
-        if (tempColors.includes(color)) {
-          const filteredColors = tempColors.filter((c) => c !== color);
-          setTempColors(filteredColors);
+        // Remove color from both tempColors and productToEdit.colors in one click
+        const isInTemp = tempColors.includes(color);
+        const isInEdit = productToEdit.colors.includes(color);
+
+        if (isInTemp || isInEdit) {
+          setTempColors(tempColors.filter((c) => c !== color));
+          setProductToEdit({
+            ...productToEdit,
+            colors: productToEdit.colors.filter((c) => c !== color),
+          });
           return;
         }
         setTempColors([...tempColors, color]);
@@ -194,14 +207,16 @@ const App = () => {
             <ErrorMessage message={errors.colors[0]} />
           </div>
           <div className="flex items-center flex-wrap space-x-1 gap-1">
-            {tempColors.map((color) => (
-              <span
-                className={`text-sm text-white ${color} rounded-full px-2 py-1`}
-                key={color}
-              >
-                {color.replace("bg-", "").replace("-600", "")}
-              </span>
-            ))}
+            {tempColors
+              .filter((color, idx, arr) => arr.indexOf(color) === idx)
+              .map((color) => (
+                <span
+                  className={`text-sm text-white ${color} rounded-full px-2 py-1`}
+                  key={color}
+                >
+                  {color.replace("bg-", "").replace("-600", "")}
+                </span>
+              ))}
           </div>
           <div className="flex items-center justify-between space-x-2">
             <Button className="bg-indigo-600 ">Submit</Button>
@@ -219,22 +234,25 @@ const App = () => {
       >
         <form className="mt-2 space-y-4" onSubmit={onSubmitEditHandler}>
           {editFormInputList}
-          {/* <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             <div className="flex items-center space-x-2">
               {renderProductColors}
             </div>
             <ErrorMessage message={errors.colors[0]} />
           </div>
           <div className="flex items-center flex-wrap space-x-1 gap-1">
-            {tempColors.map((color) => (
-              <span
-                className={`text-sm text-white ${color} rounded-full px-2 py-1`}
-                key={color}
-              >
-                {color.replace("bg-", "").replace("-600", "")}
-              </span>
-            ))}
-          </div> */}
+            {tempColors
+              .concat(productToEdit.colors)
+              .filter((color, idx, arr) => arr.indexOf(color) === idx)
+              .map((color) => (
+                <span
+                  className={`text-sm text-white ${color} rounded-full px-2 py-1`}
+                  key={color}
+                >
+                  {color.replace("bg-", "").replace("-600", "")}
+                </span>
+              ))}
+          </div>
           <div className="flex items-center justify-between space-x-2">
             <Button className="bg-indigo-600 ">Submit</Button>
             <Button className="bg-red-600 " onClick={onCloseHandler}>
